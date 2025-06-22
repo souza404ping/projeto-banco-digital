@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco da Vinha - Investimentos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div class="container header-container">
+                <div class="header-left">
+                    <a href="dashboard.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="page-title">
+                        <h1>Investimentos</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-button theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <button class="icon-button" onclick="window.location.href='notifications.html'">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="page-header">
+                <h2>Meus Investimentos</h2>
+                <p>Gerencie sua carteira de investimentos</p>
+            </div>
+
+            <div class="investment-summary">
+                <div class="summary-card total">
+                    <div class="summary-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Total Investido</div>
+                        <div class="summary-value">R$ 45.750,00</div>
+                        <div class="summary-change positive">+12,5% (YTD)</div>
+                    </div>
+                </div>
+                <div class="summary-card income">
+                    <div class="summary-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Rendimento Total</div>
+                        <div class="summary-value">R$ 5.750,00</div>
+                        <div class="summary-change positive">+R$ 850,00 (último mês)</div>
+                    </div>
+                </div>
+                <div class="summary-card balance">
+                    <div class="summary-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Disponível para Investir</div>
+                        <div class="summary-value">R$ 12.345,67</div>
+                        <div class="summary-action">
+                            <button class="btn btn-sm btn-outline" onclick="showInvestModal()">Investir Agora</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="investment-chart-container">
+                <div class="chart-header">
+                    <h3>Desempenho da Carteira</h3>
+                    <div class="chart-period">
+                        <button class="period-btn active" data-period="1M" onclick="updateChartPeriod(this)">1M</button>
+                        <button class="period-btn" data-period="3M" onclick="updateChartPeriod(this)">3M</button>
+                        <button class="period-btn" data-period="6M" onclick="updateChartPeriod(this)">6M</button>
+                        <button class="period-btn" data-period="1A" onclick="updateChartPeriod(this)">1A</button>
+                        <button class="period-btn" data-period="MAX" onclick="updateChartPeriod(this)">MAX</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="investmentChart"></canvas>
+                </div>
+            </div>
+
+            <div class="investment-tabs">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="portfolio" onclick="switchTab(this)">Minha Carteira</button>
+                    <button class="tab-btn" data-tab="opportunities" onclick="switchTab(this)">Oportunidades</button>
+                    <button class="tab-btn" data-tab="history" onclick="switchTab(this)">Histórico</button>
+                </div>
+                
+                <div class="tab-content active" id="portfolio-tab">
+                    <div class="investment-categories">
+                        <div class="category-item">
+                            <div class="category-header">
+                                <h4>Renda Fixa</h4>
+                                <span class="category-amount">R$ 25.000,00</span>
+                            </div>
+                            <div class="category-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 55%;"></div>
+                                </div>
+                                <span class="category-percentage">55%</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <h4>Renda Variável</h4>
+                                <span class="category-amount">R$ 15.000,00</span>
+                            </div>
+                            <div class="category-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 33%;"></div>
+                                </div>
+                                <span class="category-percentage">33%</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <h4>Fundos</h4>
+                                <span class="category-amount">R$ 5.750,00</span>
+                            </div>
+                            <div class="category-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 12%;"></div>
+                                </div>
+                                <span class="category-percentage">12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="investment-list">
+                        <h3>Meus Investimentos</h3>
+                        
+                        <div class="investment-item">
+                            <div class="investment-icon fixed-income">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <div class="investment-details">
+                                <div class="investment-name">CDB Banco da Vinha</div>
+                                <div class="investment-type">Renda Fixa | CDB</div>
+                                <div class="investment-metrics">
+                                    <span class="metric">
+                                        <i class="fas fa-calendar-alt"></i> Vencimento: 15/05/2026
+                                    </span>
+                                    <span class="metric">
+                                        <i class="fas fa-percentage"></i> 120% do CDI
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="investment-values">
+                                <div class="investment-current">R$ 10.000,00</div>
+                                <div class="investment-return positive">+R$ 750,00 (7,5%)</div>
+                            </div>
+                            <button class="btn-icon" onclick="showInvestmentDetails('cdb-banco-vinha')">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="investment-item">
+                            <div class="investment-icon treasury">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="investment-details">
+                                <div class="investment-name">Tesouro IPCA+</div>
+                                <div class="investment-type">Renda Fixa | Tesouro Direto</div>
+                                <div class="investment-metrics">
+                                    <span class="metric">
+                                        <i class="fas fa-calendar-alt"></i> Vencimento: 15/08/2030
+                                    </span>
+                                    <span class="metric">
+                                        <i class="fas fa-percentage"></i> IPCA + 5,54%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="investment-values">
+                                <div class="investment-current">R$ 15.000,00</div>
+                                <div class="investment-return positive">+R$ 1.250,00 (8,3%)</div>
+                            </div>
+                            <button class="btn-icon" onclick="showInvestmentDetails('tesouro-ipca')">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="investment-item">
+                            <div class="investment-icon stocks">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="investment-details">
+                                <div class="investment-name">Ações Brasileiras</div>
+                                <div class="investment-type">Renda Variável | Ações</div>
+                                <div class="investment-metrics">
+                                    <span class="metric">
+                                        <i class="fas fa-coins"></i> 5 empresas
+                                    </span>
+                                    <span class="metric">
+                                        <i class="fas fa-chart-line"></i> Variação: +15,2%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="investment-values">
+                                <div class="investment-current">R$ 15.000,00</div>
+                                <div class="investment-return positive">+R$ 2.280,00 (15,2%)</div>
+                            </div>
+                            <button class="btn-icon" onclick="showInvestmentDetails('acoes-brasileiras')">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="investment-item">
+                            <div class="investment-icon funds">
+                                <i class="fas fa-funnel-dollar"></i>
+                            </div>
+                            <div class="investment-details">
+                                <div class="investment-name">Fundo Multimercado</div>
+                                <div class="investment-type">Fundos | Multimercado</div>
+                                <div class="investment-metrics">
+                                    <span class="metric">
+                                        <i class="fas fa-calendar-alt"></i> Aplicação: 10/01/2025
+                                    </span>
+                                    <span class="metric">
+                                        <i class="fas fa-chart-line"></i> Rentab. 12M: +12,7%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="investment-values">
+                                <div class="investment-current">R$ 5.750,00</div>
+                                <div class="investment-return positive">+R$ 730,25 (12,7%)</div>
+                            </div>
+                            <button class="btn-icon" onclick="showInvestmentDetails('fundo-multimercado')">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="opportunities-tab">
+                    <div class="investment-recommendations">
+                        <h3>Recomendações para Você</h3>
+                        <p class="recommendation-intro">Com base no seu perfil de investidor <strong>Moderado</strong>, selecionamos estas oportunidades:</p>
+                        
+                        <div class="recommendation-grid">
+                            <div class="recommendation-card">
+                                <div class="recommendation-badge">Destaque</div>
+                                <div class="recommendation-header">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-landmark"></i>
+                                    </div>
+                                    <div class="recommendation-title">
+                                        <h4>CDB Banco da Vinha</h4>
+                                        <span class="recommendation-type">Renda Fixa</span>
+                                    </div>
+                                </div>
+                                <div class="recommendation-details">
+                                    <div class="recommendation-rate">125% do CDI</div>
+                                    <div class="recommendation-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Prazo</span>
+                                            <span class="info-value">2 anos</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Liquidez</span>
+                                            <span class="info-value">Após 6 meses</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Risco</span>
+                                            <span class="info-value">Baixo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('cdb-banco-vinha-125')">Investir</button>
+                            </div>
+
+                            <div class="recommendation-card">
+                                <div class="recommendation-header">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div class="recommendation-title">
+                                        <h4>Tesouro Prefixado</h4>
+                                        <span class="recommendation-type">Tesouro Direto</span>
+                                    </div>
+                                </div>
+                                <div class="recommendation-details">
+                                    <div class="recommendation-rate">10,75% a.a.</div>
+                                    <div class="recommendation-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Prazo</span>
+                                            <span class="info-value">3 anos</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Liquidez</span>
+                                            <span class="info-value">Diária</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Risco</span>
+                                            <span class="info-value">Muito Baixo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('tesouro-prefixado')">Investir</button>
+                            </div>
+
+                            <div class="recommendation-card">
+                                <div class="recommendation-header">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="recommendation-title">
+                                        <h4>LCI Imobiliária</h4>
+                                        <span class="recommendation-type">Renda Fixa</span>
+                                    </div>
+                                </div>
+                                <div class="recommendation-details">
+                                    <div class="recommendation-rate">98% do CDI</div>
+                                    <div class="recommendation-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Prazo</span>
+                                            <span class="info-value">1 ano</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Liquidez</span>
+                                            <span class="info-value">No vencimento</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Risco</span>
+                                            <span class="info-value">Baixo</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">IR</span>
+                                            <span class="info-value">Isento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('lci-imobiliaria')">Investir</button>
+                            </div>
+
+                            <div class="recommendation-card">
+                                <div class="recommendation-header">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-funnel-dollar"></i>
+                                    </div>
+                                    <div class="recommendation-title">
+                                        <h4>Fundo de Ações</h4>
+                                        <span class="recommendation-type">Renda Variável</span>
+                                    </div>
+                                </div>
+                                <div class="recommendation-details">
+                                    <div class="recommendation-rate">+18,5% (12 meses)</div>
+                                    <div class="recommendation-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Aplicação mín.</span>
+                                            <span class="info-value">R$ 500,00</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Liquidez</span>
+                                            <span class="info-value">D+3</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Risco</span>
+                                            <span class="info-value">Moderado</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('fundo-acoes')">Investir</button>
+                            </div>
+                        </div>
+
+                        <div class="all-investments-link">
+                            <a href="#" onclick="showAllInvestments()">Ver todos os investimentos disponíveis <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="history-tab">
+                    <div class="investment-history">
+                        <h3>Histórico de Investimentos</h3>
+                        
+                        <div class="history-filters">
+                            <div class="filter-group">
+                                <label for="historyPeriod">Período</label>
+                                <select id="historyPeriod" class="form-select">
+                                    <option value="30">Últimos 30 dias</option>
+                                    <option value="90">Últimos 3 meses</option>
+                                    <option value="180">Últimos 6 meses</option>
+                                    <option value="365">Último ano</option>
+                                    <option value="all" selected>Todo o período</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="historyType">Tipo</label>
+                                <select id="historyType" class="form-select">
+                                    <option value="all" selected>Todos</option>
+                                    <option value="application">Aplicações</option>
+                                    <option value="redemption">Resgates</option>
+                                    <option value="income">Rendimentos</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="filterHistory()">
+                                <i class="fas fa-filter"></i> Filtrar
+                            </button>
+                        </div>
+                        
+                        <div class="history-list">
+                            <div class="history-item application">
+                                <div class="history-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Aplicação - CDB Banco da Vinha</div>
+                                    <div class="history-date">15/05/2025</div>
+                                </div>
+                                <div class="history-amount">
+                                    R$ 10.000,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item application">
+                                <div class="history-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Aplicação - Tesouro IPCA+</div>
+                                    <div class="history-date">10/04/2025</div>
+                                </div>
+                                <div class="history-amount">
+                                    R$ 15.000,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item income">
+                                <div class="history-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Rendimento - Dividendos Ações</div>
+                                    <div class="history-date">05/04/2025</div>
+                                </div>
+                                <div class="history-amount positive">
+                                    + R$ 350,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item application">
+                                <div class="history-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Aplicação - Ações Brasileiras</div>
+                                    <div class="history-date">20/03/2025</div>
+                                </div>
+                                <div class="history-amount">
+                                    R$ 15.000,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item redemption">
+                                <div class="history-icon">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Resgate - LCI Banco da Vinha</div>
+                                    <div class="history-date">15/03/2025</div>
+                                </div>
+                                <div class="history-amount negative">
+                                    - R$ 8.500,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item income">
+                                <div class="history-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Rendimento - CDB Banco da Vinha</div>
+                                    <div class="history-date">10/03/2025</div>
+                                </div>
+                                <div class="history-amount positive">
+                                    + R$ 250,00
+                                </div>
+                            </div>
+                            
+                            <div class="history-item application">
+                                <div class="history-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">Aplicação - Fundo Multimercado</div>
+                                    <div class="history-date">10/01/2025</div>
+                                </div>
+                                <div class="history-amount">
+                                    R$ 5.000,00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="bottom-navigation">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+            <a href="transfer.html" class="bottom-nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transferir</span>
+            </a>
+            <a href="pix.html" class="bottom-nav-item">
+                <i class="fas fa-qrcode"></i>
+                <span>PIX</span>
+            </a>
+            <a href="investments.html" class="bottom-nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Investir</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal de Investimento -->
+    <div id="investModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Investimento</h3>
+                <button class="close-modal" onclick="closeInvestModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="investmentType">Tipo de Investimento</label>
+                    <select id="investmentType" class="form-select" onchange="updateInvestmentOptions()">
+                        <option value="">Selecione o tipo</option>
+                        <option value="fixed-income">Renda Fixa</option>
+                        <option value="variable-income">Renda Variável</option>
+                        <option value="funds">Fundos</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="investmentOptionsGroup" style="display: none;">
+                    <label for="investmentOption">Opção de Investimento</label>
+                    <select id="investmentOption" class="form-select">
+                        <option value="">Selecione uma opção</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="investmentAmount">Valor a Investir</label>
+                    <div class="input-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                        <input type="text" id="investmentAmount" placeholder="0,00" required>
+                    </div>
+                </div>
+                
+                <div class="investment-simulation" id="investmentSimulation" style="display: none;">
+                    <h4>Simulação de Rendimento</h4>
+                    <div class="simulation-details">
+                        <div class="simulation-item">
+                            <span class="simulation-label">Valor Investido</span>
+                            <span class="simulation-value" id="simInvestedValue">R$ 0,00</span>
+                        </div>
+                        <div class="simulation-item">
+                            <span class="simulation-label">Rendimento Estimado (12 meses)</span>
+                            <span class="simulation-value" id="simEstimatedReturn">R$ 0,00</span>
+                        </div>
+                        <div class="simulation-item">
+                            <span class="simulation-label">Valor Bruto Estimado</span>
+                            <span class="simulation-value" id="simGrossValue">R$ 0,00</span>
+                        </div>
+                        <div class="simulation-item">
+                            <span class="simulation-label">Imposto de Renda</span>
+                            <span class="simulation-value" id="simTax">R$ 0,00</span>
+                        </div>
+                        <div class="simulation-item total">
+                            <span class="simulation-label">Valor Líquido Estimado</span>
+                            <span class="simulation-value" id="simNetValue">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeInvestModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="simulateInvestment()">Simular</button>
+                <button class="btn btn-primary" id="confirmInvestBtn" style="display: none;" onclick="confirmInvestment()">Confirmar Investimento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Investimento -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detailsTitle">Detalhes do Investimento</h3>
+                <button class="close-modal" onclick="closeDetailsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailsContent">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeDetailsModal()">Fechar</button>
+                <button class="btn btn-primary" id="redeemBtn" onclick="showRedeemConfirmation()">Resgatar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Carregar tema salvo
+            loadTheme();
+            
+            // Inicializar gráfico
+            initInvestmentChart();
+        });
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            if (savedTheme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            if (newTheme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+            
+            // Atualizar gráfico para o novo tema
+            updateChartTheme();
+        }
+
+        // Gráfico de investimentos
+        let investmentChart;
+        
+        function initInvestmentChart() {
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+            const isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
+            
+            const gridColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkTheme ? '#cbd5e1' : '#6b7280';
+            
+            // Dados de exemplo para o gráfico
+            const labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Valor da Carteira',
+                    data: [40000, 41200, 42500, 43800, 44500, 45750],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            };
+            
+            investmentChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('pt-BR', {
+                                            style: 'currency',
+                                            currency: 'BRL'
+                                        }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChartTheme() {
+            if (!investmentChart) return;
+            
+            const isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
+            const gridColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkTheme ? '#cbd5e1' : '#6b7280';
+            
+            investmentChart.options.scales.x.grid.color = gridColor;
+            investmentChart.options.scales.y.grid.color = gridColor;
+            investmentChart.options.scales.x.ticks.color = textColor;
+            investmentChart.options.scales.y.ticks.color = textColor;
+            
+            investmentChart.update();
+        }
+        
+        function updateChartPeriod(btn) {
+            // Remover classe ativa de todos os botões
+            document.querySelectorAll('.period-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Adicionar classe ativa ao botão clicado
+            btn.classList.add('active');
+            
+            const period = btn.getAttribute('data-period');
+            
+            // Dados de exemplo para diferentes períodos
+            let labels, data;
+            
+            switch (period) {
+                case '1M':
+                    labels = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+                    data = [44500, 44800, 45200, 45750];
+                    break;
+                case '3M':
+                    labels = ['Mar', 'Abr', 'Mai', 'Jun'];
+                    data = [42500, 43800, 44500, 45750];
+                    break;
+                case '6M':
+                    labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+                    data = [40000, 41200, 42500, 43800, 44500, 45750];
+                    break;
+                case '1A':
+                    labels = ['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+                    data = [35000, 36200, 37500, 38000, 38500, 39200, 40000, 41200, 42500, 43800, 44500, 45750];
+                    break;
+                case 'MAX':
+                    labels = ['2023', 'Jan/24', 'Abr/24', 'Jul/24', 'Out/24', 'Jan/25', 'Abr/25', 'Jun/25'];
+                    data = [25000, 28000, 30000, 33000, 36000, 40000, 43000, 45750];
+                    break;
+            }
+            
+            // Atualizar dados do gráfico
+            investmentChart.data.labels = labels;
+            investmentChart.data.datasets[0].data = data;
+            investmentChart.update();
+        }
+        
+        // Controle de abas
+        function switchTab(btn) {
+            // Remover classe ativa de todos os botões e conteúdos
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Adicionar classe ativa ao botão clicado
+            btn.classList.add('active');
+            
+            // Mostrar conteúdo correspondente
+            const tabId = btn.getAttribute('data-tab');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        }
+        
+        // Modal de investimento
+        function showInvestModal(productId) {
+            document.getElementById('investModal').style.display = 'flex';
+            
+            // Se um produto específico foi passado, pré-selecionar
+            if (productId) {
+                preSelectInvestment(productId);
+            }
+        }
+        
+        function closeInvestModal() {
+            document.getElementById('investModal').style.display = 'none';
+            resetInvestForm();
+        }
+        
+        function resetInvestForm() {
+            document.getElementById('investmentType').value = '';
+            document.getElementById('investmentOptionsGroup').style.display = 'none';
+            document.getElementById('investmentAmount').value = '';
+            document.getElementById('investmentSimulation').style.display = 'none';
+            document.getElementById('confirmInvestBtn').style.display = 'none';
+        }
+        
+        function preSelectInvestment(productId) {
+            // Lógica para pré-selecionar um investimento específico
+            let type, option;
+            
+            switch (productId) {
+                case 'cdb-banco-vinha-125':
+                    type = 'fixed-income';
+                    option = 'cdb';
+                    break;
+                case 'tesouro-prefixado':
+                    type = 'fixed-income';
+                    option = 'treasury';
+                    break;
+                case 'lci-imobiliaria':
+                    type = 'fixed-income';
+                    option = 'lci';
+                    break;
+                case 'fundo-acoes':
+                    type = 'funds';
+                    option = 'stock-fund';
+                    break;
+                default:
+                    return;
+            }
+            
+            document.getElementById('investmentType').value = type;
+            updateInvestmentOptions();
+            
+            setTimeout(() => {
+                document.getElementById('investmentOption').value = option;
+            }, 100);
+        }
+        
+        function updateInvestmentOptions() {
+            const type = document.getElementById('investmentType').value;
+            const optionsGroup = document.getElementById('investmentOptionsGroup');
+            const optionsSelect = document.getElementById('investmentOption');
+            
+            if (!type) {
+                optionsGroup.style.display = 'none';
+                return;
+            }
+            
+            optionsGroup.style.display = 'block';
+            optionsSelect.innerHTML = '<option value="">Selecione uma opção</option>';
+            
+            switch (type) {
+                case 'fixed-income':
+                    addOption(optionsSelect, 'cdb', 'CDB Banco da Vinha (125% CDI)');
+                    addOption(optionsSelect, 'lci', 'LCI Imobiliária (98% CDI)');
+                    addOption(optionsSelect, 'lca', 'LCA Agronegócio (97% CDI)');
+                    addOption(optionsSelect, 'treasury', 'Tesouro Prefixado (10,75% a.a.)');
+                    addOption(optionsSelect, 'treasury-ipca', 'Tesouro IPCA+ (IPCA + 5,54%)');
+                    break;
+                case 'variable-income':
+                    addOption(optionsSelect, 'stocks', 'Ações Brasileiras');
+                    addOption(optionsSelect, 'reits', 'Fundos Imobiliários');
+                    addOption(optionsSelect, 'international', 'Ações Internacionais');
+                    break;
+                case 'funds':
+                    addOption(optionsSelect, 'fixed-income-fund', 'Fundo de Renda Fixa');
+                    addOption(optionsSelect, 'stock-fund', 'Fundo de Ações');
+                    addOption(optionsSelect, 'multi-market', 'Fundo Multimercado');
+                    break;
+            }
+        }
+        
+        function addOption(select, value, text) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = text;
+            select.appendChild(option);
+        }
+        
+        function simulateInvestment() {
+            const type = document.getElementById('investmentType').value;
+            const option = document.getElementById('investmentOption').value;
+            const amountStr = document.getElementById('investmentAmount').value;
+            
+            if (!type || !option || !amountStr) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            // Converter valor para número
+            const amount = parseFloat(amountStr.replace('.', '').replace(',', '.'));
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Por favor, informe um valor válido.');
+                return;
+            }
+            
+            // Simular rendimento
+            let rate = 0;
+            let taxRate = 0;
+            
+            switch (option) {
+                case 'cdb':
+                    rate = 0.125; // 125% do CDI (considerando CDI a 10% a.a.)
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'lci':
+                case 'lca':
+                    rate = 0.098; // 98% do CDI
+                    taxRate = 0; // Isento
+                    break;
+                case 'treasury':
+                    rate = 0.1075; // 10,75% a.a.
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'treasury-ipca':
+                    rate = 0.1054; // IPCA (5%) + 5,54%
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'stocks':
+                case 'reits':
+                case 'international':
+                    rate = 0.15; // Estimativa de 15% a.a.
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'fixed-income-fund':
+                    rate = 0.09; // 9% a.a.
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'stock-fund':
+                    rate = 0.18; // 18% a.a.
+                    taxRate = 0.15; // 15% IR
+                    break;
+                case 'multi-market':
+                    rate = 0.12; // 12% a.a.
+                    taxRate = 0.15; // 15% IR
+                    break;
+            }
+            
+            const estimatedReturn = amount * rate;
+            const grossValue = amount + estimatedReturn;
+            const tax = estimatedReturn * taxRate;
+            const netValue = grossValue - tax;
+            
+            // Exibir simulação
+            document.getElementById('simInvestedValue').textContent = formatCurrency(amount);
+            document.getElementById('simEstimatedReturn').textContent = formatCurrency(estimatedReturn);
+            document.getElementById('simGrossValue').textContent = formatCurrency(grossValue);
+            document.getElementById('simTax').textContent = formatCurrency(tax);
+            document.getElementById('simNetValue').textContent = formatCurrency(netValue);
+            
+            document.getElementById('investmentSimulation').style.display = 'block';
+            document.getElementById('confirmInvestBtn').style.display = 'block';
+        }
+        
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+        
+        function confirmInvestment() {
+            const type = document.getElementById('investmentType').value;
+            const option = document.getElementById('investmentOption').value;
+            const amountStr = document.getElementById('investmentAmount').value;
+            const amount = parseFloat(amountStr.replace('.', '').replace(',', '.'));
+            
+            // Simular processamento
+            const processingMessage = document.createElement('div');
+            processingMessage.className = 'processing-overlay';
+            processingMessage.innerHTML = `
+                <div class="processing-content">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Processando investimento...</p>
+                </div>
+            `;
+            document.body.appendChild(processingMessage);
+            
+            setTimeout(() => {
+                processingMessage.remove();
+                
+                // Mostrar confirmação
+                const confirmationMessage = document.createElement('div');
+                confirmationMessage.className = 'confirmation-overlay';
+                confirmationMessage.innerHTML = `
+                    <div class="confirmation-content">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Investimento Realizado!</h3>
+                        <p>Seu investimento de ${formatCurrency(amount)} foi realizado com sucesso.</p>
+                        <p class="confirmation-details">O valor já está aplicado e você pode acompanhar o rendimento na sua carteira.</p>
+                        <p class="confirmation-id">ID da transação: ${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
+                        <div class="confirmation-actions">
+                            <button class="btn btn-outline" onclick="this.parentNode.parentNode.parentNode.remove(); closeInvestModal();">Fechar</button>
+                            <button class="btn btn-primary" onclick="this.parentNode.parentNode.parentNode.remove(); closeInvestModal(); window.location.reload();">Ver Carteira</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmationMessage);
+            }, 2000);
+        }
+        
+        // Modal de detalhes do investimento
+        function showInvestmentDetails(investmentId) {
+            const detailsModal = document.getElementById('detailsModal');
+            const detailsTitle = document.getElementById('detailsTitle');
+            const detailsContent = document.getElementById('detailsContent');
+            
+            let title, content;
+            
+            switch (investmentId) {
+                case 'cdb-banco-vinha':
+                    title = 'CDB Banco da Vinha';
+                    content = `
+                        <div class="investment-detail-header">
+                            <div class="investment-detail-icon fixed-income">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <div class="investment-detail-summary">
+                                <div class="detail-amount">R$ 10.000,00</div>
+                                <div class="detail-return positive">+R$ 750,00 (7,5%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo</span>
+                                <span class="detail-value">Renda Fixa | CDB</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Aplicação</span>
+                                <span class="detail-value">15/05/2025</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Vencimento</span>
+                                <span class="detail-value">15/05/2026</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rentabilidade</span>
+                                <span class="detail-value">120% do CDI</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Aplicado</span>
+                                <span class="detail-value">R$ 10.000,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rendimento Bruto</span>
+                                <span class="detail-value positive">R$ 750,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">IR Estimado (15%)</span>
+                                <span class="detail-value negative">R$ 112,50</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rendimento Líquido</span>
+                                <span class="detail-value positive">R$ 637,50</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Atual</span>
+                                <span class="detail-value">R$ 10.750,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Liquidez</span>
+                                <span class="detail-value">Diária com perda de rentabilidade</span>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-chart">
+                            <h4>Evolução do Investimento</h4>
+                            <canvas id="detailChart" height="200"></canvas>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'tesouro-ipca':
+                    title = 'Tesouro IPCA+';
+                    content = `
+                        <div class="investment-detail-header">
+                            <div class="investment-detail-icon treasury">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="investment-detail-summary">
+                                <div class="detail-amount">R$ 15.000,00</div>
+                                <div class="detail-return positive">+R$ 1.250,00 (8,3%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo</span>
+                                <span class="detail-value">Renda Fixa | Tesouro Direto</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Aplicação</span>
+                                <span class="detail-value">10/04/2025</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Vencimento</span>
+                                <span class="detail-value">15/08/2030</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rentabilidade</span>
+                                <span class="detail-value">IPCA + 5,54%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Aplicado</span>
+                                <span class="detail-value">R$ 15.000,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rendimento Bruto</span>
+                                <span class="detail-value positive">R$ 1.250,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">IR Estimado (15%)</span>
+                                <span class="detail-value negative">R$ 187,50</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Rendimento Líquido</span>
+                                <span class="detail-value positive">R$ 1.062,50</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Atual</span>
+                                <span class="detail-value">R$ 16.250,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Liquidez</span>
+                                <span class="detail-value">Diária com preço de mercado</span>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-chart">
+                            <h4>Evolução do Investimento</h4>
+                            <canvas id="detailChart" height="200"></canvas>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'acoes-brasileiras':
+                    title = 'Ações Brasileiras';
+                    content = `
+                        <div class="investment-detail-header">
+                            <div class="investment-detail-icon stocks">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="investment-detail-summary">
+                                <div class="detail-amount">R$ 15.000,00</div>
+                                <div class="detail-return positive">+R$ 2.280,00 (15,2%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo</span>
+                                <span class="detail-value">Renda Variável | Ações</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Aplicação</span>
+                                <span class="detail-value">20/03/2025</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Aplicado</span>
+                                <span class="detail-value">R$ 15.000,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valorização</span>
+                                <span class="detail-value positive">R$ 2.280,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Atual</span>
+                                <span class="detail-value">R$ 17.280,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Liquidez</span>
+                                <span class="detail-value">D+2</span>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-stocks">
+                            <h4>Composição da Carteira</h4>
+                            <div class="stocks-list">
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <div class="stock-name">PETR4</div>
+                                        <div class="stock-company">Petrobras</div>
+                                    </div>
+                                    <div class="stock-values">
+                                        <div class="stock-amount">R$ 4.500,00</div>
+                                        <div class="stock-change positive">+18,5%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <div class="stock-name">VALE3</div>
+                                        <div class="stock-company">Vale</div>
+                                    </div>
+                                    <div class="stock-values">
+                                        <div class="stock-amount">R$ 3.800,00</div>
+                                        <div class="stock-change positive">+12,8%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <div class="stock-name">ITUB4</div>
+                                        <div class="stock-company">Itaú Unibanco</div>
+                                    </div>
+                                    <div class="stock-values">
+                                        <div class="stock-amount">R$ 3.200,00</div>
+                                        <div class="stock-change positive">+9,5%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <div class="stock-name">BBDC4</div>
+                                        <div class="stock-company">Bradesco</div>
+                                    </div>
+                                    <div class="stock-values">
+                                        <div class="stock-amount">R$ 2.500,00</div>
+                                        <div class="stock-change positive">+7,2%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <div class="stock-name">WEGE3</div>
+                                        <div class="stock-company">WEG</div>
+                                    </div>
+                                    <div class="stock-values">
+                                        <div class="stock-amount">R$ 3.280,00</div>
+                                        <div class="stock-change positive">+22,5%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'fundo-multimercado':
+                    title = 'Fundo Multimercado';
+                    content = `
+                        <div class="investment-detail-header">
+                            <div class="investment-detail-icon funds">
+                                <i class="fas fa-funnel-dollar"></i>
+                            </div>
+                            <div class="investment-detail-summary">
+                                <div class="detail-amount">R$ 5.750,00</div>
+                                <div class="detail-return positive">+R$ 730,25 (12,7%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-info">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo</span>
+                                <span class="detail-value">Fundos | Multimercado</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Data de Aplicação</span>
+                                <span class="detail-value">10/01/2025</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Aplicado</span>
+                                <span class="detail-value">R$ 5.000,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valorização</span>
+                                <span class="detail-value positive">R$ 750,00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Taxa de Administração</span>
+                                <span class="detail-value negative">R$ 19,75</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valor Atual</span>
+                                <span class="detail-value">R$ 5.730,25</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Liquidez</span>
+                                <span class="detail-value">D+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="investment-detail-chart">
+                            <h4>Evolução do Investimento</h4>
+                            <canvas id="detailChart" height="200"></canvas>
+                        </div>
+                        
+                        <div class="fund-composition">

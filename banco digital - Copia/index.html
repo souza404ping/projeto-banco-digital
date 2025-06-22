@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Digital - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-dollar-sign"></i>
+            <h1>BancoDigital</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Entrar na sua conta</h2>
+                <p>Digite suas credenciais para acessar sua conta</p>
+            </div>
+            <div class="card-content">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Usuário</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" placeholder="Seu nome de usuário" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Sua senha" required>
+                        </div>
+                    </div>
+                    <div id="error-message" class="error-message" style="display: none;">
+                        Usuário ou senha incorretos. Tente novamente.
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <button type="submit" form="loginForm" class="btn btn-primary">Entrar</button>
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Esqueceu sua senha?</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="register-link">
+            <p>Não tem uma conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+        </div>
+
+        <!-- Demo credentials info -->
+        <div class="demo-info">
+            <h3>Credenciais de Demonstração:</h3>
+            <p><strong>Usuário:</strong> Igor Souza</p>
+            <p><strong>Senha:</strong> souza0000</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            // Validação das credenciais
+            if (username === 'Igor Souza' && password === 'souza0000') {
+                // Salvar dados do usuário no localStorage
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userName', 'Igor Souza');
+                localStorage.setItem('loginTime', new Date().toISOString());
+                
+                // Redirecionar para o dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // Mostrar mensagem de erro
+                errorMessage.style.display = 'block';
+                
+                // Limpar campos
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
+                // Esconder mensagem de erro após 3 segundos
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        function showForgotPassword() {
+            alert('Funcionalidade de recuperação de senha ainda não implementada.\n\nPara esta demonstração, use:\nUsuário: Igor Souza\nSenha: souza0000');
+        }
+
+        function showRegister() {
+            alert('Funcionalidade de cadastro ainda não implementada.\n\nPara esta demonstração, use:\nUsuário: Igor Souza\nSenha: souza0000');
+        }
+
+        // Auto-preencher campos para demonstração
+        function fillDemoCredentials() {
+            document.getElementById('username').value = 'Igor Souza';
+            document.getElementById('password').value = 'souza0000';
+        }
+
+        // Adicionar botão para preencher automaticamente
+        window.addEventListener('load', function() {
+            const demoButton = document.createElement('button');
+            demoButton.textContent = 'Preencher Credenciais Demo';
+            demoButton.className = 'btn btn-outline demo-button';
+            demoButton.onclick = fillDemoCredentials;
+            
+            const cardFooter = document.querySelector('.card-footer');
+            cardFooter.insertBefore(demoButton, cardFooter.firstChild);
+        });
+    </script>
+</body>
+</html>

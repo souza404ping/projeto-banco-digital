@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Digital - Transferência</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div class="container header-container">
+                <div class="header-left">
+                    <a href="dashboard.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="page-title">
+                        <h1>Transferência</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-button" onclick="window.location.href='notifications.html'">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="page-header">
+                <h2>Transferir Dinheiro</h2>
+                <p>Transfira dinheiro para outras contas de forma rápida e segura</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Nova Transferência</h3>
+                </div>
+                <div class="card-content">
+                    <form id="transferForm">
+                        <div class="form-group">
+                            <label for="transferType">Tipo de Transferência</label>
+                            <select id="transferType" class="form-select">
+                                <option value="pix">PIX</option>
+                                <option value="ted">TED</option>
+                                <option value="doc">DOC</option>
+                                <option value="internal">Transferência Interna</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient">Destinatário</label>
+                            <div class="input-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="recipient" placeholder="Nome ou CPF do destinatário" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bank">Banco</label>
+                            <div class="input-icon">
+                                <i class="fas fa-university"></i>
+                                <input type="text" id="bank" placeholder="Banco do destinatário">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="agency">Agência</label>
+                                <input type="text" id="agency" placeholder="0000">
+                            </div>
+                            <div class="form-group half">
+                                <label for="account">Conta</label>
+                                <input type="text" id="account" placeholder="00000-0">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Valor</label>
+                            <div class="input-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                                <input type="text" id="amount" placeholder="0,00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Descrição (opcional)</label>
+                            <textarea id="description" rows="3" placeholder="Descreva o motivo da transferência"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Data da Transferência</label>
+                            <div class="input-icon">
+                                <i class="fas fa-calendar"></i>
+                                <input type="date" id="date" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="window.location.href='dashboard.html'">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Transferir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="recent-transfers">
+                <h3>Transferências Recentes</h3>
+                <div class="transfers-list">
+                    <div class="transfer-item">
+                        <div class="transfer-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="transfer-details">
+                            <div class="transfer-name">Maria Silva</div>
+                            <div class="transfer-info">Banco Digital • 20/05/2025</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline">Repetir</button>
+                    </div>
+                    <div class="transfer-item">
+                        <div class="transfer-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="transfer-details">
+                            <div class="transfer-name">Carlos Oliveira</div>
+                            <div class="transfer-info">Banco Itaú • 15/05/2025</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline">Repetir</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="bottom-navigation">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+            <a href="transfer.html" class="bottom-nav-item active">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transferir</span>
+            </a>
+            <a href="pix.html" class="bottom-nav-item">
+                <i class="fas fa-qrcode"></i>
+                <span>PIX</span>
+            </a>
+            <a href="cards.html" class="bottom-nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Cartões</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Definir data atual no campo de data
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('date').value = formattedDate;
+        });
+
+        // Formulário de transferência
+        document.getElementById('transferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const recipient = document.getElementById('recipient').value;
+            const amount = document.getElementById('amount').value;
+            const description = document.getElementById('description').value;
+            
+            if (!recipient || !amount) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Simulação de transferência
+            showTransferConfirmation(recipient, amount, description);
+        });
+
+        function showTransferConfirmation(recipient, amount, description) {
+            if (confirm(`Confirmar transferência de R$ ${amount} para ${recipient}?`)) {
+                // Simular processamento
+                const processingMessage = document.createElement('div');
+                processingMessage.className = 'processing-overlay';
+                processingMessage.innerHTML = `
+                    <div class="processing-content">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Processando transferência...</p>
+                    </div>
+                `;
+                document.body.appendChild(processingMessage);
+                
+                setTimeout(() => {
+                    processingMessage.remove();
+                    
+                    // Mostrar confirmação
+                    const confirmationMessage = document.createElement('div');
+                    confirmationMessage.className = 'confirmation-overlay';
+                    confirmationMessage.innerHTML = `
+                        <div class="confirmation-content">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>Transferência Realizada!</h3>
+                            <p>Você transferiu R$ ${amount} para ${recipient}.</p>
+                            <p class="confirmation-details">${description ? 'Descrição: ' + description : ''}</p>
+                            <p class="confirmation-id">ID da transação: ${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
+                            <div class="confirmation-actions">
+                                <button class="btn btn-outline" onclick="this.parentNode.parentNode.parentNode.remove()">Fechar</button>
+                                <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">Voltar ao Início</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(confirmationMessage);
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

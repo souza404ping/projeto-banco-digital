@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco da Vinha - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-dollar-sign"></i>
+            <h1>Banco da Vinha</h1>
+        </div>
+        <div class="user-info">
+            <img src="user-image.jpg" alt="User Image">
+            <div class="user-name">
+                Olá, João!
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="balance">
+            <h2>Saldo Disponível</h2>
+            <p>R$ 5.000,00</p>
+        </section>
+
+        <div class="quick-actions">
+            <h3>Ações Rápidas</h3>
+            <div class="actions-grid">
+                <a href="transfer.html" class="action-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transferir</span>
+                </a>
+                <a href="pix.html" class="action-btn">
+                    <i class="fas fa-qrcode"></i>
+                    <span>PIX</span>
+                </a>
+                <a href="payment.html" class="action-btn">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Pagar Conta</span>
+                </a>
+                <a href="investments.html" class="action-btn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Investir</span>
+                </a>
+            </div>
+        </div>
+
+        <section class="recent-transactions">
+            <h2>Transações Recentes</h2>
+            <ul>
+                <li>
+                    <span><i class="fas fa-arrow-up"></i></span>
+                    <span>Transferência para Maria</span>
+                    <span>R$ -200,00</span>
+                </li>
+                <li>
+                    <span><i class="fas fa-arrow-down"></i></span>
+                    <span>Salário</span>
+                    <span>R$ 3.000,00</span>
+                </li>
+                <li>
+                    <span><i class="fas fa-arrow-up"></i></span>
+                    <span>Pagamento de Conta</span>
+                    <span>R$ -150,00</span>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Banco da Vinha. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

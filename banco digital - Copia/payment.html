@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Digital - PIX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div class="container header-container">
+                <div class="header-left">
+                    <a href="dashboard.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="page-title">
+                        <h1>PIX</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-button" onclick="window.location.href='notifications.html'">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="page-header">
+                <h2>PIX</h2>
+                <p>Transferências instantâneas 24h por dia, 7 dias por semana</p>
+            </div>
+
+            <div class="pix-actions">
+                <div class="pix-action-grid">
+                    <a href="#" class="pix-action-item" onclick="showPixTransfer()">
+                        <div class="pix-action-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <span>Transferir</span>
+                    </a>
+                    <a href="#" class="pix-action-item" onclick="showPixReceive()">
+                        <div class="pix-action-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <span>Receber</span>
+                    </a>
+                    <a href="#" class="pix-action-item" onclick="showPixKeys()">
+                        <div class="pix-action-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <span>Minhas Chaves</span>
+                    </a>
+                    <a href="#" class="pix-action-item" onclick="showPixCopy()">
+                        <div class="pix-action-icon">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                        <span>Pix Copia e Cola</span>
+                    </a>
+                </div>
+            </div>
+
+            <div id="pix-content" class="pix-content">
+                <!-- Conteúdo dinâmico será carregado aqui -->
+                <div class="pix-welcome">
+                    <img src="https://via.placeholder.com/300x200?text=PIX" alt="PIX Logo" class="pix-logo">
+                    <h3>Bem-vindo ao PIX</h3>
+                    <p>Selecione uma das opções acima para começar</p>
+                </div>
+            </div>
+
+            <div class="pix-history">
+                <div class="section-header">
+                    <h3>Histórico PIX</h3>
+                    <a href="#" class="view-all">Ver todos</a>
+                </div>
+                <div class="pix-history-list">
+                    <div class="pix-history-item">
+                        <div class="pix-history-icon outgoing">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="pix-history-details">
+                            <div class="pix-history-name">Ana Beatriz</div>
+                            <div class="pix-history-date">Hoje, 14:30</div>
+                        </div>
+                        <div class="pix-history-amount expense">
+                            - R$ 120,00
+                        </div>
+                    </div>
+                    <div class="pix-history-item">
+                        <div class="pix-history-icon incoming">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="pix-history-details">
+                            <div class="pix-history-name">Lucas Mendes</div>
+                            <div class="pix-history-date">Ontem, 09:15</div>
+                        </div>
+                        <div class="pix-history-amount income">
+                            + R$ 350,00
+                        </div>
+                    </div>
+                    <div class="pix-history-item">
+                        <div class="pix-history-icon outgoing">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="pix-history-details">
+                            <div class="pix-history-name">Mercado Express</div>
+                            <div class="pix-history-date">22/05/2025, 18:45</div>
+                        </div>
+                        <div class="pix-history-amount expense">
+                            - R$ 87,50
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="bottom-navigation">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+            <a href="transfer.html" class="bottom-nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transferir</span>
+            </a>
+            <a href="pix.html" class="bottom-nav-item active">
+                <i class="fas fa-qrcode"></i>
+                <span>PIX</span>
+            </a>
+            <a href="cards.html" class="bottom-nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Cartões</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                window.location.href = 'index.html';
+                return;
+            }
+        });
+
+        function showPixTransfer() {
+            const pixContent = document.getElementById('pix-content');
+            pixContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Transferir via PIX</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="pixTransferForm">
+                            <div class="form-group">
+                                <label for="pixKey">Chave PIX</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-key"></i>
+                                    <input type="text" id="pixKey" placeholder="CPF, e-mail, telefone ou chave aleatória" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pixAmount">Valor</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <input type="text" id="pixAmount" placeholder="0,00" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pixDescription">Descrição (opcional)</label>
+                                <textarea id="pixDescription" rows="2" placeholder="Adicione uma descrição"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Continuar</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('pixTransferForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const pixKey = document.getElementById('pixKey').value;
+                const pixAmount = document.getElementById('pixAmount').value;
+                
+                if (!pixKey || !pixAmount) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                // Simulação de transferência PIX
+                showPixConfirmation(pixKey, pixAmount);
+            });
+        }
+
+        function showPixReceive() {
+            const pixContent = document.getElementById('pix-content');
+            pixContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Receber via PIX</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="qr-container">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX0136a629532e-7693-4846-b028-f142a1dd04b15204000053039865802BR5913Igor%20Souza6008Brasilia62070503***63041D14" alt="QR Code PIX" class="qr-code">
+                        </div>
+                        <div class="pix-key-display">
+                            <p>Sua chave PIX:</p>
+                            <div class="pix-key">
+                                <span id="pixKeyDisplay">igor.souza@email.com</span>
+                                <button class="copy-button" onclick="copyPixKey()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiveAmount">Valor (opcional)</label>
+                            <div class="input-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                                <input type="text" id="receiveAmount" placeholder="0,00">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateQRCode()">Gerar QR Code</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showPixKeys() {
+            const pixContent = document.getElementById('pix-content');
+            pixContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Minhas Chaves PIX</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="pix-keys-list">
+                            <div class="pix-key-item">
+                                <div class="pix-key-type">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>E-mail</span>
+                                </div>
+                                <div class="pix-key-value">igor.souza@email.com</div>
+                                <button class="btn-icon">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="pix-key-item">
+                                <div class="pix-key-type">
+                                    <i class="fas fa-id-card"></i>
+                                    <span>CPF</span>
+                                </div>
+                                <div class="pix-key-value">***.***.***-**</div>
+                                <button class="btn-icon">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="pix-key-item">
+                                <div class="pix-key-type">
+                                    <i class="fas fa-phone"></i>
+                                    <span>Telefone</span>
+                                </div>
+                                <div class="pix-key-value">(11) 9****-****</div>
+                                <button class="btn-icon">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" onclick="showAddPixKey()">
+                            <i class="fas fa-plus"></i> Cadastrar Nova Chave
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showPixCopy() {
+            const pixContent = document.getElementById('pix-content');
+            pixContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h3>PIX Copia e Cola</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="form-group">
+                            <label for="pixCopyPaste">Cole o código PIX</label>
+                            <textarea id="pixCopyPaste" rows="4" placeholder="Cole o código PIX aqui"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="readPixCode()">Ler Código</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showPixConfirmation(pixKey, amount) {
+            // Simular processamento
+            const processingMessage = document.createElement('div');
+            processingMessage.className = 'processing-overlay';
+            processingMessage.innerHTML = `
+                <div class="processing-content">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Processando PIX...</p>
+                </div>
+            `;
+            document.body.appendChild(processingMessage);
+            
+            setTimeout(() => {
+                processingMessage.remove();
+                
+                // Mostrar confirmação
+                const confirmationMessage = document.createElement('div');
+                confirmationMessage.className = 'confirmation-overlay';
+                confirmationMessage.innerHTML = `
+                    <div class="confirmation-content">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>PIX Realizado!</h3>
+                        <p>Você transferiu R$ ${amount} via PIX.</p>
+                        <p class="confirmation-details">Destinatário: ${pixKey}</p>
+                        <p class="confirmation-id">ID da transação: ${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
+                        <div class="confirmation-actions">
+                            <button class="btn btn-outline" onclick="this.parentNode.parentNode.parentNode.remove()">Fechar</button>
+                            <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">Voltar ao Início</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmationMessage);
+            }, 2000);
+        }
+
+        function copyPixKey() {
+            const pixKey = document.getElementById('pixKeyDisplay').textContent;
+            navigator.clipboard.writeText(pixKey).then(() => {
+                alert('Chave PIX copiada para a área de transferência!');
+            });
+        }
+
+        function generateQRCode() {
+            const amount = document.getElementById('receiveAmount').value;
+            alert(`QR Code gerado com valor de R$ ${amount || '0,00'}`);
+        }
+
+        function showAddPixKey() {
+            alert('Funcionalidade de cadastro de nova chave PIX em desenvolvimento.');
+        }
+
+        function readPixCode() {
+            const pixCode = document.getElementById('pixCopyPaste').value;
+            if (!pixCode) {
+                alert('Por favor, cole um código PIX válido.');
+                return;
+            }
+            
+            alert('Código PIX lido com sucesso! Redirecionando para a tela de pagamento...');
+            showPixTransfer();
+        }
+    </script>
+</body>
+</html>

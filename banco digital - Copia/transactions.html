@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Digital - Transações</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div class="container header-container">
+                <div class="header-left">
+                    <a href="dashboard.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="page-title">
+                        <h1>Transações</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-button" onclick="window.location.href='notifications.html'">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="page-header">
+                <h2>Histórico de Transações</h2>
+                <p>Visualize todas as suas transações</p>
+            </div>
+
+            <div class="transactions-filter">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="period">Período</label>
+                        <select id="period" class="form-select">
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="15">Últimos 15 dias</option>
+                            <option value="30" selected>Últimos 30 dias</option>
+                            <option value="90">Últimos 3 meses</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="type">Tipo</label>
+                        <select id="type" class="form-select">
+                            <option value="all" selected>Todos</option>
+                            <option value="income">Entradas</option>
+                            <option value="expense">Saídas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-row" id="dateRangeContainer" style="display: none;">
+                    <div class="filter-group">
+                        <label for="startDate">De</label>
+                        <input type="date" id="startDate" class="form-input">
+                    </div>
+                    <div class="filter-group">
+                        <label for="endDate">Até</label>
+                        <input type="date" id="endDate" class="form-input">
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm" id="applyFilters">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+            </div>
+
+            <div class="transactions-summary">
+                <div class="summary-card income">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Entradas</div>
+                        <div class="summary-value">R$ 5.800,00</div>
+                    </div>
+                </div>
+                <div class="summary-card expense">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Saídas</div>
+                        <div class="summary-value">R$ 2.654,33</div>
+                    </div>
+                </div>
+                <div class="summary-card balance">
+                    <div class="summary-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-label">Saldo</div>
+                        <div class="summary-value">R$ 3.145,67</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="transactions-list-container">
+                <div class="transactions-date-group">
+                    <div class="date-header">Hoje</div>
+                    <div class="transactions-list" id="today-transactions">
+                        <!-- Transações de hoje serão carregadas via JavaScript -->
+                    </div>
+                </div>
+
+                <div class="transactions-date-group">
+                    <div class="date-header">Ontem</div>
+                    <div class="transactions-list" id="yesterday-transactions">
+                        <!-- Transações de ontem serão carregadas via JavaScript -->
+                    </div>
+                </div>
+
+                <div class="transactions-date-group">
+                    <div class="date-header">Esta Semana</div>
+                    <div class="transactions-list" id="week-transactions">
+                        <!-- Transações da semana serão carregadas via JavaScript -->
+                    </div>
+                </div>
+
+                <div class="transactions-date-group">
+                    <div class="date-header">Este Mês</div>
+                    <div class="transactions-list" id="month-transactions">
+                        <!-- Transações do mês serão carregadas via JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="export-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-download"></i> Exportar Extrato
+                </button>
+            </div>
+        </main>
+
+        <div class="bottom-navigation">
+            <a href="dashboard.html" class="bottom-nav-item">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+            <a href="transfer.html" class="bottom-nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transferir</span>
+            </a>
+            <a href="pix.html" class="bottom-nav-item">
+                <i class="fas fa-qrcode"></i>
+                <span>PIX</span>
+            </a>
+            <a href="cards.html" class="bottom-nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Cartões</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Carregar transações
+            loadAllTransactions();
+            
+            // Configurar filtros
+            setupFilters();
+        });
+
+        function setupFilters() {
+            const periodSelect = document.getElementById('period');
+            const dateRangeContainer = document.getElementById('dateRangeContainer');
+            
+            periodSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    dateRangeContainer.style.display = 'flex';
+                } else {
+                    dateRan  {
+                    dateRangeContainer.style.display = 'flex';
+                } else {
+                    dateRangeContainer.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('applyFilters').addEventListener('click', function() {
+                // Simular aplicação de filtros
+                alert('Filtros aplicados! Em uma aplicação real, isso atualizaria a lista de transações.');
+                
+                // Recarregar transações (simulação)
+                loadAllTransactions();
+            });
+        }
+
+        function loadAllTransactions() {
+            // Dados de exemplo para transações
+            const transactions = {
+                today: [
+                    { name: 'Supermercado Extra', date: 'Hoje, 14:30', amount: -156.78, type: 'expense', category: 'Alimentação' },
+                    { name: 'Transferência Recebida', date: 'Hoje, 10:15', amount: 800.00, type: 'income', category: 'Transferência' }
+                ],
+                yesterday: [
+                    { name: 'Farmácia', date: 'Ontem, 18:45', amount: -65.90, type: 'expense', category: 'Saúde' },
+                    { name: 'Restaurante', date: 'Ontem, 13:20', amount: -89.90, type: 'expense', category: 'Alimentação' }
+                ],
+                week: [
+                    { name: 'Posto de Gasolina', date: '20/05/2025', amount: -150.00, type: 'expense', category: 'Transporte' },
+                    { name: 'Netflix', date: '18/05/2025', amount: -39.90, type: 'expense', category: 'Entretenimento' },
+                    { name: 'Depósito', date: '17/05/2025', amount: 200.00, type: 'income', category: 'Depósito' }
+                ],
+                month: [
+                    { name: 'Salário', date: '15/05/2025', amount: 5000.00, type: 'income', category: 'Salário' },
+                    { name: 'Aluguel', date: '10/05/2025', amount: -1200.00, type: 'expense', category: 'Moradia' },
+                    { name: 'Conta de Luz', date: '12/05/2025', amount: -145.30, type: 'expense', category: 'Contas' },
+                    { name: 'Conta de Água', date: '08/05/2025', amount: -87.50, type: 'expense', category: 'Contas' },
+                    { name: 'Academia', date: '05/05/2025', amount: -99.90, type: 'expense', category: 'Saúde' }
+                ]
+            };
+            
+            // Carregar transações para cada seção
+            loadTransactions('today-transactions', transactions.today);
+            loadTransactions('yesterday-transactions', transactions.yesterday);
+            loadTransactions('week-transactions', transactions.week);
+            loadTransactions('month-transactions', transactions.month);
+        }
+
+        function loadTransactions(containerId, transactions) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const transactionElement = document.createElement('div');
+                transactionElement.className = 'transaction-item';
+                transactionElement.innerHTML = `
+                    <div class="transaction-category">
+                        <div class="category-icon ${transaction.type}">
+                            <i class="fas fa-${getCategoryIcon(transaction.category)}"></i>
+                        </div>
+                    </div>
+                    <div class="transaction-info">
+                        <div class="transaction-name">${transaction.name}</div>
+                        <div class="transaction-date">${transaction.date}</div>
+                        <div class="transaction-category-tag">${transaction.category}</div>
+                    </div>
+                    <div class="transaction-amount ${transaction.type}">
+                        ${transaction.amount > 0 ? '+' : ''} R$ ${Math.abs(transaction.amount).toFixed(2).replace('.', ',')}
+                    </div>
+                `;
+                
+                // Adicionar evento de clique para mostrar detalhes
+                transactionElement.addEventListener('click', function() {
+                    showTransactionDetails(transaction);
+                });
+                
+                container.appendChild(transactionElement);
+            });
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'Alimentação': 'utensils',
+                'Transporte': 'car',
+                'Moradia': 'home',
+                'Saúde': 'heartbeat',
+                'Entretenimento': 'film',
+                'Contas': 'file-invoice',
+                'Salário': 'money-bill-wave',
+                'Transferência': 'exchange-alt',
+                'Depósito': 'piggy-bank'
+            };
+            
+            return icons[category] || 'tag';
+        }
+
+        function showTransactionDetails(transaction) {
+            // Criar overlay para detalhes da transação
+            const transactionDetails = document.createElement('div');
+            transactionDetails.className = 'confirmation-overlay';
+            transactionDetails.innerHTML = `
+                <div class="confirmation-content">
+                    <h3>Detalhes da Transação</h3>
+                    <div class="transaction-details">
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">Descrição:</span>
+                            <span class="transaction-detail-value">${transaction.name}</span>
+                        </div>
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">Valor:</span>
+                            <span class="transaction-detail-value ${transaction.type}">
+                                ${transaction.amount > 0 ? '+' : ''} R$ ${Math.abs(transaction.amount).toFixed(2).replace('.', ',')}
+                            </span>
+                        </div>
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">Data:</span>
+                            <span class="transaction-detail-value">${transaction.date}</span>
+                        </div>
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">Categoria:</span>
+                            <span class="transaction-detail-value">${transaction.category}</span>
+                        </div>
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">Tipo:</span>
+                            <span class="transaction-detail-value">
+                                ${transaction.type === 'income' ? 'Entrada' : 'Saída'}
+                            </span>
+                        </div>
+                        <div class="transaction-detail-item">
+                            <span class="transaction-detail-label">ID da Transação:</span>
+                            <span class="transaction-detail-value">${Math.random().toString(36).substring(2, 10).toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <div class="confirmation-actions">
+                        <button class="btn btn-outline" onclick="this.parentNode.parentNode.remove()">Fechar</button>
+                        <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">Voltar ao Início</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(transactionDetails);
+        }
+    </script>
+</body>
+</html>
